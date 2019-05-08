@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:xml_rpc/client.dart' as xml_rpc;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,9 +30,28 @@ class _SendCrossPageState extends State<SendCrossPage> {
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Future<Map> rst = _get(strList);
     rst.then((Map rstList) {
-      if (rstList[strList[0]] == null)
-        url = '';
-      else
+      if (rstList[strList[0]] == null || rstList[strList[1]] == null || rstList[strList[2]] == null || rstList[strList[3]] == null) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context){
+              return AlertDialog(
+                title: new Text("配置网站"),
+                content: new Text("请先进行网站配置>v<"),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("去配置"),
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => SettingPage()));
+                    },
+                  )
+                ]
+              );
+            }
+        );
+        return;
+      } else
         url = rstList[strList[0]] + '/action/xmlrpc';
       cid = rstList[strList[1]];
       username = rstList[strList[2]];
@@ -55,7 +73,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
             'data': comment['content'],
           };
           CommentComponent component =
-          new CommentComponent(name: map['author'], text: map['data']);
+              new CommentComponent(name: map['author'], text: map['data']);
           _comments.add(component);
         }
         setState(() {
@@ -95,8 +113,8 @@ class _SendCrossPageState extends State<SendCrossPage> {
             List<String> strList = ['url', 'cid', 'username', 'password'];
             Future<Map> rst = _get(strList);
             rst.then((Map rstList) {
-              if (rstList[strList[0]] == null)
-                url = '';
+              if (rstList[strList[0]] == null || rstList[strList[1]] == null || rstList[strList[2]] == null || rstList[strList[3]] == null)
+                return;
               else
                 url = rstList[strList[0]] + '/action/xmlrpc';
               cid = rstList[strList[1]];
@@ -108,9 +126,6 @@ class _SendCrossPageState extends State<SendCrossPage> {
                 password,
                 int.parse(cid),
                 {
-                  'author': 'clover',
-                  'author_email': 'idealclover@163.com',
-                  'author_url': 'https://idealclover.top',
                   'content': _textController.value.text.toString(),
                 }
               ]).then((result) {
@@ -136,11 +151,11 @@ class _SendCrossPageState extends State<SendCrossPage> {
                 Row(children: <Widget>[
                   Flexible(
                       child: TextField(
-                        controller: _textController,
-                        decoration: InputDecoration.collapsed(
-                            hintText: "说点什么吧"),
-                        onTap:()=> Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => EditPage())),
-                      )),
+                    controller: _textController,
+                    decoration: InputDecoration.collapsed(hintText: "说点什么吧"),
+//                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+//                        builder: (BuildContext context) => EditPage())),
+                  )),
                   Container(
                       margin: new EdgeInsets.symmetric(horizontal: 4.0),
                       child: new IconButton(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/DrawerComponent.dart';
 import '../Components/CommentComponent.dart';
+import './SettingPage.dart';
+import './EditPage.dart';
 
 class SendCrossPage extends StatefulWidget {
   SendCrossPage() : super();
@@ -25,33 +27,41 @@ class _SendCrossPageState extends State<SendCrossPage> {
   }
 
   Future<Null> _loadData() async {
-    String url, cid;
-    List<String> strList = ['url', 'cid', 'token'];
+    String url, cid, username, password;
+    List<String> strList = ['url', 'cid', 'username', 'password'];
     Future<Map> rst = _get(strList);
     rst.then((Map rstList) {
-      if(rstList[strList[0]] == null) url='';
-      else url = rstList[strList[0]] + '/restful/comments';
+      if (rstList[strList[0]] == null)
+        url = '';
+      else
+        url = rstList[strList[0]] + '/action/xmlrpc';
       cid = rstList[strList[1]];
-      Dio dio = new Dio();
-      Future<Response> response = dio.get(url, data: {'cid': cid, 'pageSize': 20});
-      response.then((Response response) {
-        var data = response.data;
-        if (data['status'] == 'success') {
-          for (var i = 0; i < data['data']['pageSize']; i++) {
-            Map map = {
-              'author': data['data']['dataSet'][i]['author'],
-              'time': data['data']['dataSet'][i]['created'],
-              'data': data['data']['dataSet'][i]['text'],
-            };
-            CommentComponent component =
-                new CommentComponent(name: map['author'], text: map['data']);
-            _comments.add(component);
-          }
-          setState(() {
-            _comments = _comments;
-          });
+      username = rstList[strList[2]];
+      password = rstList[strList[3]];
+      xml_rpc.call(url, 'wp.getComments', [
+        1,
+        username,
+        password,
+        {
+          'post_id': int.parse(cid),
+          'number': 20,
         }
-      });
+      ]).then((result) {
+        print(result.toString());
+        for (var comment in result) {
+          Map map = {
+            'author': comment['author'],
+            'time': comment['date_created_gmt'],
+            'data': comment['content'],
+          };
+          CommentComponent component =
+          new CommentComponent(name: map['author'], text: map['data']);
+          _comments.add(component);
+        }
+        setState(() {
+          _comments = _comments;
+        });
+      }).catchError((error) => print(error));
     });
   }
 
@@ -80,14 +90,15 @@ class _SendCrossPageState extends State<SendCrossPage> {
           child: DrawerComponent(),
         ),
         body: Builder(builder: (BuildContext context) {
-
           send() async {
             String url, cid, username, password;
             List<String> strList = ['url', 'cid', 'username', 'password'];
             Future<Map> rst = _get(strList);
             rst.then((Map rstList) {
-              if(rstList[strList[0]] == null) url='';
-              else url = rstList[strList[0]] + '/action/xmlrpc';
+              if (rstList[strList[0]] == null)
+                url = '';
+              else
+                url = rstList[strList[0]] + '/action/xmlrpc';
               cid = rstList[strList[1]];
               username = rstList[strList[2]];
               password = rstList[strList[3]];
@@ -102,15 +113,13 @@ class _SendCrossPageState extends State<SendCrossPage> {
                   'author_url': 'https://idealclover.top',
                   'content': _textController.value.text.toString(),
                 }
-              ])
-                  .then((result) {
-                    print(result.toString());
-                    _textController.clear();
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text("发送成功")));
-                    _refresh();
-                  })
-                  .catchError((error) => print(error));
+              ]).then((result) {
+                print(result.toString());
+                _textController.clear();
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text("发送成功")));
+                _refresh();
+              }).catchError((error) => print(error));
             });
           }
 
@@ -127,9 +136,11 @@ class _SendCrossPageState extends State<SendCrossPage> {
                 Row(children: <Widget>[
                   Flexible(
                       child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration.collapsed(hintText: "说点什么吧"),
-                  )),
+                        controller: _textController,
+                        decoration: InputDecoration.collapsed(
+                            hintText: "说点什么吧"),
+                        onTap:()=> Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => EditPage())),
+                      )),
                   Container(
                       margin: new EdgeInsets.symmetric(horizontal: 4.0),
                       child: new IconButton(

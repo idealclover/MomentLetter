@@ -12,11 +12,9 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   TextEditingController _urlController;
   TextEditingController _cidController;
-//  TextEditingController _tokenController;
   TextEditingController _usernameController;
   TextEditingController _passwordController;
   final FocusNode cidTextFieldNode = FocusNode();
-//  final FocusNode tokenTextFieldNode = FocusNode();
   final FocusNode usernameTextFieldNode = FocusNode();
   final FocusNode passwordTextFieldNode = FocusNode();
 
@@ -28,7 +26,6 @@ class _SettingPageState extends State<SettingPage> {
     rst.then((Map rstList) {
       _urlController = new TextEditingController(text: rstList[strList[0]]);
       _cidController = new TextEditingController(text: rstList[strList[1]]);
-//      _tokenController = new TextEditingController(text: rstList[strList[2]]);
       _usernameController = new TextEditingController(text: rstList[strList[3]]);
       _passwordController = new TextEditingController(text: rstList[strList[4]]);
     });
@@ -49,7 +46,6 @@ class _SettingPageState extends State<SettingPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('url', _urlController.value.text.toString());
       prefs.setString('cid', _cidController.value.text.toString());
-//      prefs.setString('token', _tokenController.value.text.toString());
       prefs.setString('username', _usernameController.value.text.toString());
       prefs.setString('password', _passwordController.value.text.toString());
     }
@@ -82,18 +78,6 @@ class _SettingPageState extends State<SettingPage> {
                 onEditingComplete: () =>
                     FocusScope.of(context).requestFocus(usernameTextFieldNode),
               ),
-//              TextField(
-//                focusNode: tokenTextFieldNode,
-//                controller: _tokenController,
-//                decoration: InputDecoration(
-//                  contentPadding: const EdgeInsets.only(top: 10.0),
-//                  icon: Icon(Icons.lock),
-//                  labelText: 'Token',
-//                ),
-//                obscureText: true,
-//                onEditingComplete: () =>
-//                    FocusScope.of(context).requestFocus(usernameTextFieldNode),
-//              ),
               TextField(
                 focusNode: usernameTextFieldNode,
                 controller: _usernameController,

@@ -24,11 +24,12 @@ class _SettingPageState extends State<SettingPage> {
   bool _validateEmail = false;
   bool _validateUsername = false;
   bool _validatePassword = false;
+  bool _useRestful = false;
 
   @override
   void initState() {
     super.initState();
-    List<String> strList = ['url', 'cid', 'email', 'username', 'password'];
+    List<String> strList = ['url', 'cid', 'email', 'username', 'password', 'Restful'];
     Future<Map> rst = get(strList);
     rst.then((Map rstList) {
       _urlController = new TextEditingController(text: rstList[strList[0]]);
@@ -38,6 +39,7 @@ class _SettingPageState extends State<SettingPage> {
           new TextEditingController(text: rstList[strList[3]]);
       _passwordController =
           new TextEditingController(text: rstList[strList[4]]);
+      _useRestful = (rstList[strList[4]]==null || rstList[strList[4]]== "false") ? false : true;
     });
   }
 
@@ -59,6 +61,7 @@ class _SettingPageState extends State<SettingPage> {
       prefs.setString('email', _emailController.value.text.toString());
       prefs.setString('username', _usernameController.value.text.toString());
       prefs.setString('password', _passwordController.value.text.toString());
+      _useRestful ? prefs.setString('restful', 'true') : prefs.setString('restful', 'false');
     }
 
     bool check() {
@@ -89,7 +92,7 @@ class _SettingPageState extends State<SettingPage> {
         return false;
     }
 
-    check_url() {
+    checkUrl() {
       setState(() {
         _urlController.text.isEmpty
             ? _validateUrl = true
@@ -97,7 +100,7 @@ class _SettingPageState extends State<SettingPage> {
       });
     }
 
-    check_cid() {
+    checkCid() {
       setState(() {
         _cidController.text.isEmpty
             ? _validateCid = true
@@ -105,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
       });
     }
 
-    check_email() {
+    checkEmail() {
       setState(() {
         _emailController.text.isEmpty
             ? _validateEmail = true
@@ -113,7 +116,7 @@ class _SettingPageState extends State<SettingPage> {
       });
     }
 
-    check_username() {
+    checkUsername() {
       setState(() {
         _usernameController.text.isEmpty
             ? _validateUsername = true
@@ -121,7 +124,7 @@ class _SettingPageState extends State<SettingPage> {
       });
     }
 
-    check_password() {
+    checkPassword() {
       setState(() {
         _passwordController.text.isEmpty
             ? _validatePassword = true
@@ -145,7 +148,7 @@ class _SettingPageState extends State<SettingPage> {
                 labelText: 'URL',
                 errorText: _validateUrl ? "请输入 URL" : null,
               ),
-              onChanged: (String a) => check_url(),
+              onChanged: (String a) => checkUrl(),
               onEditingComplete: () =>
                   FocusScope.of(context).requestFocus(cidTextFieldNode),
             ),
@@ -158,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
                 labelText: 'Cid',
                 errorText: _validateCid ? "请输入 cid" : null,
               ),
-              onChanged: (String a) => check_cid(),
+              onChanged: (String a) => checkCid(),
               onEditingComplete: () =>
                   FocusScope.of(context).requestFocus(emailTextFieldNode),
             ),
@@ -171,7 +174,7 @@ class _SettingPageState extends State<SettingPage> {
                 labelText: 'Email',
                 errorText: _validateEmail ? "请输入 email" : null,
               ),
-              onChanged: (String a) => check_email(),
+              onChanged: (String a) => checkEmail(),
               onEditingComplete: () =>
                   FocusScope.of(context).requestFocus(usernameTextFieldNode),
             ),
@@ -184,7 +187,7 @@ class _SettingPageState extends State<SettingPage> {
                 labelText: 'Username',
                 errorText: _validateUsername ? "请输入 username" : null,
               ),
-              onChanged: (String a) => check_username(),
+              onChanged: (String a) => checkUsername(),
               onEditingComplete: () =>
                   FocusScope.of(context).requestFocus(passwordTextFieldNode),
             ),
@@ -197,8 +200,18 @@ class _SettingPageState extends State<SettingPage> {
                 labelText: 'Password',
                 errorText: _validatePassword ? "请输入 password" : null,
               ),
-              onChanged: (String a) => check_password(),
+              onChanged: (String a) => checkPassword(),
               obscureText: true,
+            ),
+//            Checkbox(
+//              onChanged: (bool checked){},
+//              value: false,
+//            ),
+            CheckboxListTile(
+              title: Text("使用 Restful 方式"),
+              subtitle: Text("需要安装插件，默认使用 XMLRPC 方式"),
+              onChanged: (bool checked) =>  setState(()=>_useRestful=checked),
+              value: _useRestful,
             ),
             OutlineButton(
                 child: Text('保存'),

@@ -1,6 +1,7 @@
-import 'package:xml_rpc/client.dart' as xml_rpc;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xml_rpc/client.dart' as xml_rpc;
+import 'package:dio/dio.dart';
 import '../Components/DrawerComponent.dart';
 import '../Components/CommentComponent.dart';
 import './SettingPage.dart';
@@ -16,7 +17,7 @@ class SendCrossPage extends StatefulWidget {
 }
 
 class _SendCrossPageState extends State<SendCrossPage> {
-  final TextEditingController _textController = new TextEditingController();
+//  final TextEditingController _textController = new TextEditingController();
   List<CommentComponent> _comments = <CommentComponent>[];
 
   @override
@@ -25,35 +26,38 @@ class _SendCrossPageState extends State<SendCrossPage> {
     _loadData();
   }
 
-  Future<Null> _loadData() async {
+  void _alert() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: new Text("配置网站"),
+              content: new Text("请先进行网站配置>v<"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("去配置"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => SettingPage()));
+                  },
+                )
+              ]);
+        });
+  }
+
+  Future<Null> _loadDataXmlRPC() async {
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Future<Map> rst = _get(strList);
     rst.then((Map rstList) {
       if (rstList[strList[0]] == null || rstList[strList[1]] == null ||
           rstList[strList[2]] == null || rstList[strList[3]] == null) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                  title: new Text("配置网站"),
-                  content: new Text("请先进行网站配置>v<"),
-                  actions: <Widget>[
-                    new FlatButton(
-                      child: new Text("去配置"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => SettingPage()));
-                      },
-                    )
-                  ]
-              );
-            }
-        );
+        _alert();
         return;
-      } else
-        url = rstList[strList[0]] + '/action/xmlrpc';
+      }
+      url = rstList[strList[0]] + '/action/xmlrpc';
       cid = rstList[strList[1]];
       username = rstList[strList[2]];
       password = rstList[strList[3]];
@@ -84,7 +88,59 @@ class _SendCrossPageState extends State<SendCrossPage> {
     });
   }
 
-  Future<Null> _refresh() async {
+  Future<Null> _loadDataRestful() async {
+    String url, cid;
+    List<String> strList = ['url', 'cid'];
+    Future<Map> rst = _get(strList);
+    rst.then((Map rstList) async{
+      if (rstList[strList[0]] == null || rstList[strList[1]] == null) {
+        _alert();
+        return;
+      }
+      url = rstList[strList[0]];
+      cid = rstList[strList[1]];
+      Dio dio = new Dio();
+      Response response = await dio.get(
+          url + '/restful/comments', data: {'cid': cid, 'pageSize': 20},options: Options(
+          headers: {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
+          }));
+      var data = response.data;
+      if (data['status'] == 'success') {
+        for (var i = 0; i < data['data']['pageSize']; i++) {
+          Map map = {
+            'author': data['data']['dataSet'][i]['author'],
+            'time': data['data']['dataSet'][i]['created'],
+            'data': data['data']['dataSet'][i]['text'],
+          };
+          CommentComponent component =
+          new CommentComponent(name: map['author'], text: map['data']);
+          _comments.add(component);
+        }
+        setState(() {
+          _comments = _comments;
+        });
+      }
+      Response responseToken = await dio.get(
+          url + '/restful/post', data: {'cid': cid},options: Options(
+          headers: {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
+          }));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', responseToken.data['data']['csrfToken']);
+    });
+  }
+
+    Future<Null> _loadData() async {
+      bool _useRestful;
+      List<String> strList = ['restful'];
+      Map rst = await _get(strList);
+      _useRestful = (rst[strList[0]]==null || rst[strList[0]]== "false") ? false : true;
+      if(_useRestful) return await _loadDataRestful();
+      else return _loadDataXmlRPC();
+  }
+
+    Future<Null> _refresh() async {
     _comments.clear();
     await _loadData();
     return;

@@ -158,6 +158,12 @@ class _EditPageState extends State<EditPage> {
     return true;
   }
 
+  void _listen(){
+    if (!_focusNode.hasFocus) {
+      _saveDraft();
+    }
+  }
+
   Future<bool> _buildDocument() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String draft = prefs.getString('draft');
@@ -167,11 +173,7 @@ class _EditPageState extends State<EditPage> {
       document = NotusDocument();
     _controller = new ZefyrController(document);
     _focusNode = new FocusNode();
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        _saveDraft();
-      }
-    });
+    _focusNode.addListener(_listen);
     return true;
   }
 
@@ -191,6 +193,7 @@ class _EditPageState extends State<EditPage> {
               onPressed: () async {
                 bool rst = await _sendComment();
                 if (rst) {
+                  _focusNode.removeListener(_listen);
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   prefs.remove('draft');
                   Fluttertoast.showToast(

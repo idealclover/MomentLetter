@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage() : super();
@@ -29,7 +30,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    List<String> strList = ['url', 'cid', 'email', 'username', 'password', 'Restful'];
+    List<String> strList = ['url', 'cid', 'email', 'username', 'password', 'restful'];
     Future<Map> rst = get(strList);
     rst.then((Map rstList) {
       _urlController = new TextEditingController(text: rstList[strList[0]]);
@@ -39,7 +40,7 @@ class _SettingPageState extends State<SettingPage> {
           new TextEditingController(text: rstList[strList[3]]);
       _passwordController =
           new TextEditingController(text: rstList[strList[4]]);
-      _useRestful = (rstList[strList[4]]==null || rstList[strList[4]]== "false") ? false : true;
+      _useRestful = (rstList[strList[5]]==null || rstList[strList[5]]== "false") ? false : true;
     });
   }
 
@@ -215,11 +216,19 @@ class _SettingPageState extends State<SettingPage> {
             ),
             OutlineButton(
                 child: Text('保存'),
-                onPressed: () {
+                onPressed: () async{
                   if (check()) return;
-                  save();
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text("数据存储成功")));
+                  await save();
+                  await Fluttertoast.showToast(
+                      msg: "数据存储成功",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIos: 1,
+                      backgroundColor: Colors.indigo,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                  Navigator.of(context).pop();
                 }),
           ],
         ));

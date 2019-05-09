@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xml_rpc/client.dart' as xml_rpc;
 import 'package:flutter/material.dart';
 import 'package:zefyr/zefyr.dart';
@@ -19,6 +20,12 @@ class _EditPageState extends State<EditPage> {
   ZefyrController _controller;
   FocusNode _focusNode;
   NotusDocument document;
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   void _alert() async {
     await _saveDraft();
@@ -108,14 +115,15 @@ class _EditPageState extends State<EditPage> {
     try{
       Response response = await dio.post(url + '/restful/comment',
           data: {
-            'cid': cid,
+            'cid': int.parse(cid),
             'text': mk,
-            'token': token,
             'author': username,
             'mail': email,
-            'url': url
+            'url': url,
+            'token': token
           },
           options: Options(headers: {
+            "Content-Type":"application/json",
             "User-Agent":
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
           }));
@@ -138,9 +146,15 @@ class _EditPageState extends State<EditPage> {
   Future<bool> _saveDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('draft', jsonEncode(_controller.document.toJson()));
-    //TODO: showToast
-//    Scaffold.of(context).showSnackBar(SnackBar(content: Text("存储成功")));
-//    Navigator.of(context).pop();
+    Fluttertoast.showToast(
+        msg: "草稿已保存",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.indigo,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
     return true;
   }
 
@@ -153,28 +167,53 @@ class _EditPageState extends State<EditPage> {
       document = NotusDocument();
     _controller = new ZefyrController(document);
     _focusNode = new FocusNode();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        _saveDraft();
+      }
+    });
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(title: Text(widget.title), actions: [
           FlatButton(
               onPressed: () async {
                 bool rst = await _saveDraft();
-//                Scaffold.of(context)
-//                    .showSnackBar(SnackBar(content: Text("存储成功")));
                 if (rst) Navigator.of(context).pop();
               },
               child: Text('SAVE', style: TextStyle(color: Colors.white))),
           FlatButton(
               onPressed: () async {
                 bool rst = await _sendComment();
-//                Scaffold.of(context)
-//                    .showSnackBar(SnackBar(content: Text("发送成功")));
-                if (rst) Navigator.of(context).pop();
+                if (rst) {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.remove('draft');
+                  Fluttertoast.showToast(
+                      msg: "发送成功",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIos: 1,
+                      backgroundColor: Colors.indigo,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                  Navigator.of(context).pop();
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "发送失败",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIos: 1,
+                      backgroundColor: Colors.indigo,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                }
                 //TODO: send unsuccessfully
               },
               child: Text('SEND', style: TextStyle(color: Colors.white)))
@@ -189,18 +228,18 @@ class _EditPageState extends State<EditPage> {
             ),
         body: new WillPopScope(
             onWillPop: _saveDraft,
-            child: FutureBuilder(
+            child: ZefyrScaffold(
+              child: FutureBuilder(
                 future: _buildDocument(),
                 builder: (context, AsyncSnapshot<bool> draft) {
                   if (draft.hasData) {
-                    return ZefyrScaffold(
-                        child: ZefyrEditor(
+                    return ZefyrEditor(
                       controller: _controller,
                       focusNode: _focusNode,
-                    ));
+                    );
                   } else
                     return Container();
-                })));
+                }))));
 //        body: ZefyrScaffold(
 //          child: ZefyrEditor(
 //            controller: _controller,

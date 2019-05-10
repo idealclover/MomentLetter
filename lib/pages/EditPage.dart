@@ -60,6 +60,7 @@ class _EditPageState extends State<EditPage> {
 
   Future<bool> _sendCommentXmlrpc() async{
     String mk = notusMarkdown.encode(_controller.document.toDelta());
+    mk = mk + '发自[时光鸡 APP](https://idealclover.top/archives/560/)';
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Map rst = await _get(strList);
@@ -97,6 +98,7 @@ class _EditPageState extends State<EditPage> {
   Future<bool> _sendCommentRestful() async{
     String url, cid, token, username, email;
     String mk = notusMarkdown.encode(_controller.document.toDelta());
+    mk = mk + '发自[时光鸡 APP](https://idealclover.top/archives/560/)';
     List<String> strList = ['url', 'cid', 'token', 'username', 'email'];
     Map rst = await _get(strList);
     if (rst[strList[0]] == null ||

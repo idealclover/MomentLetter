@@ -23,10 +23,6 @@ handsome 作者的时光机在 [这里](https://www.ihewro.com/cross.html)，傻
 
 总之，如果你也拥有 Typecho 博客，也想自建时光机；或者如果你也使用 handsome 主题，那就来试试吧！
 
-
-<!--more-->
-
-
 ## 如何使用
 
 Android：在 [release](https://github.com/idealclover/MomentMachine/releases) 或 [蒲公英内侧平台](https://www.pgyer.com/momentmachine) 或 ~~[酷安]()~~ 中下载打包好的 apk 包并安装
@@ -57,6 +53,26 @@ Android：在 [release](https://github.com/idealclover/MomentMachine/releases) �
 - [ ] 支持音频/视频
 - [ ] 更换主题
 - [ ] 美化
+
+## Contribute
+
+如果有任何想法或需求，可以在 issue 中告诉我们，同时我们欢迎各种 pull requests
+
+## Open-source Licenses
+
+This project is under [GNU General Public License v3.0 license](https://github.com/idealclover/MomentMachine/blob/master/LICENSE), feel free to use it **under the license**.
+
+Also the project is based on following flutter libraries:
+
+* shared_preferences: ^0.4.3
+* flutter_markdown: ^0.2.0
+* flutter_bugly: ^0.2.0
+* fluttertoast: ^3.0.4
+* url_launcher: ^5.0.2
+* zefyr: ^0.5.0
+* xml_rpc: ^0.2.2
+* crypto: ^2.0.6
+* dio: ^1.0.9
 
 ## Getting Started
 

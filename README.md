@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://cdn.idealclover.cn//MomentMachine/ic_launcher.png" alt="Moment Machine" width="100">
+<img src="https://i.loli.net/2019/05/10/5cd54570b8044.png" alt="Moment Machine" width="100">
 </p>
 <h1 align="center">Moment Machine /  时光鸡</h1>
 
@@ -9,7 +9,7 @@
 
 [ihewro](https://www.ihewro.com) 的 [handsome](https://www.ihewro.com/archives/489/) 主题提供了一个很好的 idea：即可以在Typecho 博客中建立一个独立页面，通过评论的形式展示自己的心情动态，提供一个类似个人推特的形式，我们一般叫它时光机。
 
-![](https://cdn.idealclover.cn/Blog/19.05.10%20%E6%97%B6%E5%85%89%E6%9C%BA%20v1.0/1.png)
+![](https://i.loli.net/2019/05/10/5cd545952e72b.png)
 
 后来即使是不再使用这个主题了，但时光机这个功能还是令自己难忘，并移植到了自己的[主题](https://github.com/idealclover/clover)之中（暂仍处于开发阶段）。
 
@@ -17,7 +17,7 @@ handsome 作者的时光机在 [这里](https://www.ihewro.com/cross.html)，傻
 
 于是傻翠用 flutter 做了一个~~理论上跨平台~~的APP，可以实现查看时光机，发送时光机的功能，就不用再打开电脑再发送了。
 
-![](https://cdn.idealclover.cn/Blog/19.05.10%20%E6%97%B6%E5%85%89%E6%9C%BA%20v1.0/2.png)
+![](https://i.loli.net/2019/05/10/5cd545bc3a6ad.png)
 
 这款 APP 背后与 Typecho 后端通信的接口可以切换 Typecho 原生的 XMLRPC 或 第三方的 Restful 插件。这意味着并不需要过多配置，你便可以轻松接入。
 

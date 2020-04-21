@@ -1,3 +1,4 @@
+import '../generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,8 +11,6 @@ import './EditPage.dart';
 
 class SendCrossPage extends StatefulWidget {
   SendCrossPage() : super();
-
-  final String title = 'Moment Machine';
 
   @override
   _SendCrossPageState createState() => _SendCrossPageState();
@@ -167,7 +166,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
-          backgroundColor: Colors.indigo,
+          backgroundColor: Theme.of(context).primaryColor,
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
@@ -176,7 +175,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
-          backgroundColor: Colors.indigo,
+          backgroundColor: Theme.of(context).primaryColor,
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -196,7 +195,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(S.of(context).app_name),
         ),
         drawer: Drawer(
           child: DrawerComponent(),
@@ -265,7 +264,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
           onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (BuildContext context) => EditPage())),
           tooltip: 'Increment',
-          child: new Icon(Icons.add),
+          child: new Icon(Icons.add, color: Colors.white),
         ));
   }
 }

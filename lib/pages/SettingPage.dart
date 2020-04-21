@@ -30,7 +30,14 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    List<String> strList = ['url', 'cid', 'email', 'username', 'password', 'restful'];
+    List<String> strList = [
+      'url',
+      'cid',
+      'email',
+      'username',
+      'password',
+      'restful'
+    ];
     Future<Map> rst = get(strList);
     rst.then((Map rstList) {
       _urlController = new TextEditingController(text: rstList[strList[0]]);
@@ -40,7 +47,10 @@ class _SettingPageState extends State<SettingPage> {
           new TextEditingController(text: rstList[strList[3]]);
       _passwordController =
           new TextEditingController(text: rstList[strList[4]]);
-      _useRestful = (rstList[strList[5]]==null || rstList[strList[5]]== "false") ? false : true;
+      _useRestful =
+          (rstList[strList[5]] == null || rstList[strList[5]] == "false")
+              ? false
+              : true;
     });
   }
 
@@ -62,7 +72,9 @@ class _SettingPageState extends State<SettingPage> {
       prefs.setString('email', _emailController.value.text.toString());
       prefs.setString('username', _usernameController.value.text.toString());
       prefs.setString('password', _passwordController.value.text.toString());
-      _useRestful ? prefs.setString('restful', 'true') : prefs.setString('restful', 'false');
+      _useRestful
+          ? prefs.setString('restful', 'true')
+          : prefs.setString('restful', 'false');
     }
 
     bool check() {
@@ -139,99 +151,121 @@ class _SettingPageState extends State<SettingPage> {
       ),
       body: Builder(builder: (BuildContext context) {
         return SingleChildScrollView(
-            child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _urlController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                icon: Icon(Icons.web),
-                labelText: 'URL',
-                errorText: _validateUrl ? "请输入 URL" : null,
-              ),
-              onChanged: (String a) => checkUrl(),
-              onEditingComplete: () =>
-                  FocusScope.of(context).requestFocus(cidTextFieldNode),
-            ),
-            TextField(
-              focusNode: cidTextFieldNode,
-              controller: _cidController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                icon: Icon(Icons.bookmark),
-                labelText: 'Cid',
-                errorText: _validateCid ? "请输入 cid" : null,
-              ),
-              onChanged: (String a) => checkCid(),
-              onEditingComplete: () =>
-                  FocusScope.of(context).requestFocus(emailTextFieldNode),
-            ),
-            TextField(
-              focusNode: emailTextFieldNode,
-              controller: _emailController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                icon: Icon(Icons.email),
-                labelText: 'Email',
-                errorText: _validateEmail ? "请输入 email" : null,
-              ),
-              onChanged: (String a) => checkEmail(),
-              onEditingComplete: () =>
-                  FocusScope.of(context).requestFocus(usernameTextFieldNode),
-            ),
-            TextField(
-              focusNode: usernameTextFieldNode,
-              controller: _usernameController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                icon: Icon(Icons.account_circle),
-                labelText: 'Username',
-                errorText: _validateUsername ? "请输入 username" : null,
-              ),
-              onChanged: (String a) => checkUsername(),
-              onEditingComplete: () =>
-                  FocusScope.of(context).requestFocus(passwordTextFieldNode),
-            ),
-            TextField(
-              focusNode: passwordTextFieldNode,
-              controller: _passwordController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 10.0),
-                icon: Icon(Icons.lock),
-                labelText: 'Password',
-                errorText: _validatePassword ? "请输入 password" : null,
-              ),
-              onChanged: (String a) => checkPassword(),
-              obscureText: true,
-            ),
+            child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      controller: _urlController,
+                      decoration: InputDecoration(
+//                contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon: Icon(Icons.web),
+                        labelText: 'URL',
+                        hintText: 'URL',
+                        errorText: _validateUrl ? "请输入 URL" : null,
+                      ),
+                      onChanged: (String a) => checkUrl(),
+                      onEditingComplete: () =>
+                          FocusScope.of(context).requestFocus(cidTextFieldNode),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(5),
+                    ),
+                    TextField(
+                      focusNode: cidTextFieldNode,
+                      controller: _cidController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon: Icon(Icons.bookmark),
+                        labelText: 'Cid',
+                        errorText: _validateCid ? "请输入 cid" : null,
+                      ),
+                      onChanged: (String a) => checkCid(),
+                      onEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(emailTextFieldNode),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(5),
+                    ),
+                    TextField(
+                      focusNode: emailTextFieldNode,
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon: Icon(Icons.email),
+                        labelText: 'Email',
+                        errorText: _validateEmail ? "请输入 email" : null,
+                      ),
+                      onChanged: (String a) => checkEmail(),
+                      onEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(usernameTextFieldNode),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(5),
+                    ),
+                    TextField(
+                      focusNode: usernameTextFieldNode,
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon: Icon(Icons.account_circle),
+                        labelText: 'Username',
+                        errorText: _validateUsername ? "请输入 username" : null,
+                      ),
+                      onChanged: (String a) => checkUsername(),
+                      onEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(passwordTextFieldNode),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(5),
+                    ),
+                    TextField(
+                      focusNode: passwordTextFieldNode,
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon: Icon(Icons.lock),
+                        labelText: 'Password',
+                        errorText: _validatePassword ? "请输入 password" : null,
+                      ),
+                      onChanged: (String a) => checkPassword(),
+                      obscureText: true,
+                    ),
 //            Checkbox(
 //              onChanged: (bool checked){},
 //              value: false,
 //            ),
-            CheckboxListTile(
-              title: Text("使用 Restful 方式"),
-              subtitle: Text("需要安装插件，默认使用 XMLRPC 方式"),
-              onChanged: (bool checked) =>  setState(()=>_useRestful=checked),
-              value: _useRestful,
-            ),
-            OutlineButton(
-                child: Text('保存'),
-                onPressed: () async{
-                  if (check()) return;
-                  await save();
-                  await Fluttertoast.showToast(
-                      msg: "数据存储成功",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIos: 1,
-                      backgroundColor: Colors.indigo,
-                      textColor: Colors.white,
-                      fontSize: 16.0
-                  );
-                  Navigator.of(context).pop();
-                }),
-          ],
-        ));
+//                    CheckboxListTile(
+//                      title: Text("使用 Restful 方式"),
+//                      subtitle: Text("需要安装插件，默认使用 XMLRPC 方式"),
+//                      onChanged: (bool checked) =>
+//                          setState(() => _useRestful = checked),
+//                      value: _useRestful,
+//                    ),
+
+                    Container(
+                        width: double.infinity,
+                        child: FlatButton(
+                            color: Theme.of(context).primaryColor,
+                            textColor: Colors.white,
+                            child: Text('保存'),
+                            onPressed: () async {
+                              if (check()) return;
+                              await save();
+                              await Fluttertoast.showToast(
+                                  msg: "数据存储成功",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIos: 1,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.of(context).pop();
+                            })),
+                  ],
+                )));
       }),
     );
   }

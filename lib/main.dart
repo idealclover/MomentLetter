@@ -1,3 +1,5 @@
+import 'generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import './pages/SendCrossPage.dart';
 
@@ -8,7 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '时光信笺',
+      onGenerateTitle: (BuildContext context) => S.of(context).app_name,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
       theme: ThemeData(
           primaryColor: Color(0xFF919FC5),
           accentColor: Color(0xFFA6B4CA),

@@ -83,14 +83,13 @@ class _DrawerComponentState extends State<DrawerComponent> {
             }),
       ),
       ListTile(
-          title: Text('时光鸡'),
+          title: Text('时光信笺'),
           trailing: Icon(Icons.send),
           onTap: () {
-            Navigator.of(context).pop();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => SendCrossPage()));
+            Navigator.of(context).pop();
           }),
-      Divider(),
       ListTile(
           title: Text('检查更新'),
           trailing: Icon(Icons.system_update_alt),
@@ -125,7 +124,6 @@ class _DrawerComponentState extends State<DrawerComponent> {
 //              }
 //            });
           }),
-      Divider(),
       ListTile(
           title: Text('投喂作者'),
           trailing: Icon(Icons.free_breakfast),
@@ -139,7 +137,6 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   .showSnackBar(SnackBar(content: Text("调用支付宝失败")));
             }
           }),
-      Divider(),
       ListTile(
           title: Text('作者博客'),
           trailing: Icon(Icons.computer),
@@ -152,7 +149,6 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   .showSnackBar(SnackBar(content: Text("打开链接失败")));
             }
           }),
-      Divider(),
       ListTile(
           title: Text('设置'),
           trailing: Icon(Icons.settings),
@@ -161,7 +157,6 @@ class _DrawerComponentState extends State<DrawerComponent> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => SettingPage()));
           }),
-      Divider(),
     ]);
   }
 }

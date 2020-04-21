@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
 import './pages/SendCrossPage.dart';
 
-void main() => FlutterBugly.postCatchedException(() {
-      runApp(MyApp());
-    });
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    FlutterBugly.init(
-        androidAppId: "4afa1af849",
-        iOSAppId: "your iOS app id",
-        enableNotification: true,
-        autoCheckUpgrade: true);
-
     return MaterialApp(
-      title: 'MomentMachine',
+      title: '时光信笺',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
+          primaryColor: Color(0xFF919FC5),
+          accentColor: Color(0xFFA6B4CA),
+          primaryColorBrightness: Brightness.dark),
       home: SendCrossPage(),
     );
   }

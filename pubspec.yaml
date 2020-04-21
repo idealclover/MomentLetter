@@ -22,7 +22,7 @@ dependencies:
   shared_preferences: ^0.4.3
   flutter_markdown: ^0.2.0
 #  flutter_html_view: ^0.5.10
-  flutter_bugly: ^0.2.0
+#  flutter_bugly: ^0.2.0
   fluttertoast: ^3.0.4
   url_launcher: ^5.0.2
   zefyr: ^0.10.0

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
@@ -96,35 +95,35 @@ class _DrawerComponentState extends State<DrawerComponent> {
           title: Text('检查更新'),
           trailing: Icon(Icons.system_update_alt),
           onTap: () {
-            FlutterBugly.getUpgradeInfo().then((UpgradeInfo info) {
-              if (info != null && info.id != null) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          title: new Text(info.title),
-                          content: new Text(info.newFeature),
-                          actions: <Widget>[
-                            new FlatButton(
-                              child: new Text("去升级"),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                if (await canLaunch(info.apkUrl)) {
-                                  await launch(info.apkUrl);
-                                } else {
-                                  Scaffold.of(context).showSnackBar(
-                                      SnackBar(content: Text("打开链接失败")));
-                                }
-                              },
-                            ),
-                            new FlatButton(
-                                child: new Text("下次再说"),
-                                onPressed: () => Navigator.of(context).pop())
-                          ]);
-                    });
-              }
-            });
+//            FlutterBugly.getUpgradeInfo().then((UpgradeInfo info) {
+//              if (info != null && info.id != null) {
+//                showDialog(
+//                    barrierDismissible: false,
+//                    context: context,
+//                    builder: (BuildContext context) {
+//                      return AlertDialog(
+//                          title: new Text(info.title),
+//                          content: new Text(info.newFeature),
+//                          actions: <Widget>[
+//                            new FlatButton(
+//                              child: new Text("去升级"),
+//                              onPressed: () async {
+//                                Navigator.of(context).pop();
+//                                if (await canLaunch(info.apkUrl)) {
+//                                  await launch(info.apkUrl);
+//                                } else {
+//                                  Scaffold.of(context).showSnackBar(
+//                                      SnackBar(content: Text("打开链接失败")));
+//                                }
+//                              },
+//                            ),
+//                            new FlatButton(
+//                                child: new Text("下次再说"),
+//                                onPressed: () => Navigator.of(context).pop())
+//                          ]);
+//                    });
+//              }
+//            });
           }),
       Divider(),
       ListTile(

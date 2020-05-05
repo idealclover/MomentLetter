@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:notus/convert.dart';
 import 'package:dio/dio.dart';
+import '../Resources/Constant.dart';
 import './SettingPage.dart';
 
 class EditPage extends StatefulWidget {
@@ -59,7 +60,7 @@ class _EditPageState extends State<EditPage> {
 
   Future<bool> _sendCommentXmlrpc() async {
     String mk = notusMarkdown.encode(_controller.document.toDelta());
-    mk = mk + '发自[时光鸡 APP](https://idealclover.top/archives/560/)';
+    mk = mk + Constant.watermark;
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Map rst = await _get(strList);
@@ -94,57 +95,8 @@ class _EditPageState extends State<EditPage> {
     }
   }
 
-  Future<bool> _sendCommentRestful() async {
-    String url, cid, token, username, email;
-    String mk = notusMarkdown.encode(_controller.document.toDelta());
-    mk = mk + '发自[时光鸡 APP](https://idealclover.top/archives/560/)';
-    List<String> strList = ['url', 'cid', 'token', 'username', 'email'];
-    Map rst = await _get(strList);
-    if (rst[strList[0]] == null ||
-        rst[strList[1]] == null ||
-        rst[strList[3]] == null ||
-        rst[strList[4]] == null) {
-      _alert();
-      return false;
-    }
-    url = rst[strList[0]];
-    cid = rst[strList[1]];
-    token = rst[strList[2]];
-    username = rst[strList[3]];
-    email = rst[strList[4]];
-    Dio dio = new Dio();
-    try {
-      Response response = await dio.post(url + '/restful/comment',
-          data: {
-            'cid': int.parse(cid),
-            'text': mk,
-            'author': username,
-            'mail': email,
-            'url': url,
-            'token': token
-          },
-          options: Options(headers: {
-            "Content-Type": "application/json",
-            "User-Agent":
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
-          }));
-      return true;
-    } on DioError catch (e) {
-      print(e);
-      return false;
-    }
-  }
-
   Future<bool> _sendComment() async {
-    bool _useRestful;
-    List<String> strList = ['restful'];
-    Map rst = await _get(strList);
-    _useRestful =
-        (rst[strList[0]] == null || rst[strList[0]] == "false") ? false : true;
-    if (_useRestful)
-      return await _sendCommentRestful();
-    else
-      return _sendCommentXmlrpc();
+    return _sendCommentXmlrpc();
   }
 
   Future<bool> _saveDraft() async {
@@ -155,7 +107,6 @@ class _EditPageState extends State<EditPage> {
         msg: "草稿已保存",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
         backgroundColor: Theme.of(context).primaryColor,
         textColor: Colors.white,
         fontSize: 16.0);
@@ -195,7 +146,6 @@ class _EditPageState extends State<EditPage> {
                       msg: "发送成功",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.BOTTOM,
-                      timeInSecForIos: 1,
                       backgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       fontSize: 16.0);
@@ -205,7 +155,6 @@ class _EditPageState extends State<EditPage> {
                       msg: "发送失败",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.BOTTOM,
-                      timeInSecForIos: 1,
                       backgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       fontSize: 16.0);

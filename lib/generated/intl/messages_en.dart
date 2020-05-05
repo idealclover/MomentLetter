@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "app_name" : MessageLookupByLibrary.simpleMessage("时光信笺"),
     "edit_title" : MessageLookupByLibrary.simpleMessage("写信"),
     "save_button" : MessageLookupByLibrary.simpleMessage("保存"),
-    "send_button" : MessageLookupByLibrary.simpleMessage("投递")
+    "send_button" : MessageLookupByLibrary.simpleMessage("投递"),
+    "settings_title" : MessageLookupByLibrary.simpleMessage("设置")
   };
 }

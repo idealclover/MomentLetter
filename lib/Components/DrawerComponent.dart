@@ -60,7 +60,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
             builder: (context, AsyncSnapshot<String> avatar) {
               if (avatar.hasData && avatar.data != null) {
                 return CircleAvatar(
-                  backgroundImage: NetworkImage(avatar.data),
+                    backgroundImage: NetworkImage(avatar.data),
+                    backgroundColor: Theme.of(context).primaryColor
                 );
               } else
                 return Text("");

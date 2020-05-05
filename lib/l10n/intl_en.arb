@@ -3,5 +3,7 @@
 
   "edit_title": "写信",
   "save_button": "保存",
-  "send_button": "投递"
+  "send_button": "投递",
+
+  "settings_title": "设置"
 }

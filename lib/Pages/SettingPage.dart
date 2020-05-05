@@ -1,10 +1,10 @@
+import '../generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage() : super();
-  final String title = 'Settings';
 
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -25,7 +25,6 @@ class _SettingPageState extends State<SettingPage> {
   bool _validateEmail = false;
   bool _validateUsername = false;
   bool _validatePassword = false;
-  bool _useRestful = false;
 
   @override
   void initState() {
@@ -36,7 +35,6 @@ class _SettingPageState extends State<SettingPage> {
       'email',
       'username',
       'password',
-      'restful'
     ];
     Future<Map> rst = get(strList);
     rst.then((Map rstList) {
@@ -47,10 +45,6 @@ class _SettingPageState extends State<SettingPage> {
           new TextEditingController(text: rstList[strList[3]]);
       _passwordController =
           new TextEditingController(text: rstList[strList[4]]);
-      _useRestful =
-          (rstList[strList[5]] == null || rstList[strList[5]] == "false")
-              ? false
-              : true;
     });
   }
 
@@ -72,9 +66,6 @@ class _SettingPageState extends State<SettingPage> {
       prefs.setString('email', _emailController.value.text.toString());
       prefs.setString('username', _usernameController.value.text.toString());
       prefs.setString('password', _passwordController.value.text.toString());
-      _useRestful
-          ? prefs.setString('restful', 'true')
-          : prefs.setString('restful', 'false');
     }
 
     bool check() {
@@ -147,7 +138,7 @@ class _SettingPageState extends State<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(S.of(context).settings_title),
       ),
       body: Builder(builder: (BuildContext context) {
         return SingleChildScrollView(
@@ -159,7 +150,6 @@ class _SettingPageState extends State<SettingPage> {
                     TextField(
                       controller: _urlController,
                       decoration: InputDecoration(
-//                contentPadding: const EdgeInsets.only(top: 10.0),
                         icon: Icon(Icons.web),
                         labelText: 'URL',
                         hintText: 'URL',
@@ -232,17 +222,6 @@ class _SettingPageState extends State<SettingPage> {
                       onChanged: (String a) => checkPassword(),
                       obscureText: true,
                     ),
-//            Checkbox(
-//              onChanged: (bool checked){},
-//              value: false,
-//            ),
-//                    CheckboxListTile(
-//                      title: Text("使用 Restful 方式"),
-//                      subtitle: Text("需要安装插件，默认使用 XMLRPC 方式"),
-//                      onChanged: (bool checked) =>
-//                          setState(() => _useRestful = checked),
-//                      value: _useRestful,
-//                    ),
 
                     Container(
                         width: double.infinity,
@@ -257,7 +236,6 @@ class _SettingPageState extends State<SettingPage> {
                                   msg: "数据存储成功",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIos: 1,
                                   backgroundColor:
                                       Theme.of(context).primaryColor,
                                   textColor: Colors.white,

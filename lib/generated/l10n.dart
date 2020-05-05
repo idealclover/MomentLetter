@@ -62,6 +62,15 @@ class S {
       args: [],
     );
   }
+
+  String get settings_title {
+    return Intl.message(
+      '设置',
+      name: 'settings_title',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

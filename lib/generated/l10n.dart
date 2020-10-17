@@ -8,18 +8,24 @@ import 'intl/messages_all.dart';
 // Made by Localizely
 // **************************************************************************
 
+// ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
+
 class S {
   S();
+  
+  static S current;
   
   static const AppLocalizationDelegate delegate =
     AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final String name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final String localeName = Intl.canonicalizedLocale(name);
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
-      return S();
+      S.current = S();
+      
+      return S.current;
     });
   } 
 
@@ -27,6 +33,7 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `时光信笺`
   String get app_name {
     return Intl.message(
       '时光信笺',
@@ -36,6 +43,7 @@ class S {
     );
   }
 
+  /// `写信`
   String get edit_title {
     return Intl.message(
       '写信',
@@ -45,6 +53,7 @@ class S {
     );
   }
 
+  /// `保存`
   String get save_button {
     return Intl.message(
       '保存',
@@ -54,6 +63,7 @@ class S {
     );
   }
 
+  /// `投递`
   String get send_button {
     return Intl.message(
       '投递',
@@ -63,6 +73,7 @@ class S {
     );
   }
 
+  /// `设置`
   String get settings_title {
     return Intl.message(
       '设置',
@@ -91,7 +102,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
 
   bool _isSupported(Locale locale) {
     if (locale != null) {
-      for (Locale supportedLocale in supportedLocales) {
+      for (var supportedLocale in supportedLocales) {
         if (supportedLocale.languageCode == locale.languageCode) {
           return true;
         }

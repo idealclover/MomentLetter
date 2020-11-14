@@ -1,4 +1,5 @@
 import '../generated/l10n.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,11 +19,32 @@ class SendCrossPage extends StatefulWidget {
 
 class _SendCrossPageState extends State<SendCrossPage> {
   List<CommentComponent> _comments = <CommentComponent>[];
+  ScrollController _scrollController = ScrollController();
+//  GlobalKey<RefreshIndicatorState> _refreshKey =
+//      GlobalKey<RefreshIndicatorState>();
+  int pageNum = 0;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadData(pageNum);
+//    WidgetsBinding.instance.addPostFrameCallback((_) {
+//      _refreshKey.currentState?.show();
+//    });
+    _scrollController.addListener(() {
+      double edge = 0;
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        pageNum++;
+        _loadData(pageNum);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _alert() async {
@@ -45,7 +67,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
         });
   }
 
-  Future<bool> _loadDataXmlRPC() async {
+  Future<bool> _loadDataXmlRPC(int pageNum) async {
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Map rst = await _get(strList);
@@ -65,19 +87,18 @@ class _SendCrossPageState extends State<SendCrossPage> {
         1,
         username,
         password,
-        {
-          'post_id': int.parse(cid),
-          'number': 20,
-        }
+        {'post_id': int.parse(cid), 'number': 20, 'offset': (pageNum + 1) * 20}
       ]);
       for (var comment in response) {
+//        print(comment);
+        if (comment['user_id'] == '0' || comment['parent'] != '0') continue;
         Map map = {
           'author': comment['author'],
           'time': comment['date_created_gmt'],
           'data': comment['content'],
         };
-        CommentComponent component =
-            new CommentComponent(name: map['author'], text: map['data'], time: map['time']);
+        CommentComponent component = new CommentComponent(
+            name: map['author'], text: map['data'], time: map['time']);
         _comments.add(component);
       }
       setState(() {
@@ -90,15 +111,19 @@ class _SendCrossPageState extends State<SendCrossPage> {
     }
   }
 
-  Future<bool> _loadData() async {
-    return await _loadDataXmlRPC();
+  Future<bool> _loadData(int pageNum) async {
+    print(pageNum);
+    return await _loadDataXmlRPC(pageNum);
   }
 
   Future<Null> _refresh() async {
     _comments.clear();
     bool rst = false;
     try {
-      rst = await _loadData();
+//      setState(() {
+      pageNum = 0;
+//      });
+      rst = await _loadData(pageNum);
     } catch (error) {
       print(error);
     }
@@ -107,16 +132,16 @@ class _SendCrossPageState extends State<SendCrossPage> {
           msg: "刷新成功",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
-          backgroundColor: Theme.of(context).primaryColor,
-          textColor: Colors.white,
+//          backgroundColor: Theme.of(context).primaryColor,
+//          textColor: Colors.white,
           fontSize: 16.0);
     } else {
       await Fluttertoast.showToast(
           msg: "刷新失败",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
-          backgroundColor: Theme.of(context).primaryColor,
-          textColor: Colors.white,
+//          backgroundColor: Theme.of(context).primaryColor,
+//          textColor: Colors.white,
           fontSize: 16.0);
     }
     return;
@@ -136,20 +161,25 @@ class _SendCrossPageState extends State<SendCrossPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).app_name),
+          elevation: 0,
         ),
         drawer: Drawer(
           child: DrawerComponent(),
         ),
         body: Builder(builder: (BuildContext context) {
           return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.all(5),
+//              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              color: Colors.black12,
               child: Column(children: <Widget>[
                 Flexible(
                     child: RefreshIndicator(
+//                        key: _refreshKey,
                         onRefresh: _refresh,
                         child: ListView.builder(
                           itemBuilder: (_, int index) => _comments[index],
                           itemCount: _comments.length,
+                          controller: _scrollController,
                         )))
               ]));
         }),
@@ -157,7 +187,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
           onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (BuildContext context) => EditPage())),
           tooltip: 'Increment',
-          child: new Icon(Icons.add, color: Colors.white),
+          child: new Icon(Icons.add),
         ));
   }
 }

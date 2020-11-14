@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:convert/convert.dart';
@@ -60,7 +61,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
             builder: (context, AsyncSnapshot<String> avatar) {
               if (avatar.hasData && avatar.data != null) {
                 return CircleAvatar(
-                    backgroundImage: NetworkImage(avatar.data),
+                    backgroundImage: CachedNetworkImageProvider(avatar.data),
                     backgroundColor: Theme.of(context).primaryColor
                 );
               } else

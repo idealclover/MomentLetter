@@ -129,39 +129,39 @@ class _EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomPadding: true,
-        appBar: AppBar(title: Text(S.of(context).edit_title), actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _saveDraft
-          ),
-          IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () async {
-                bool rst = await _sendComment();
-                if (rst) {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.remove('draft');
-                  Fluttertoast.showToast(
-                      msg: "发送成功",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                  Navigator.of(context).pop();
-                } else {
-                  Fluttertoast.showToast(
-                      msg: "发送失败",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                }
-                //TODO: send unsuccessfully
-              }),
-        ]),
+        appBar: AppBar(
+            title: Text(S.of(context).edit_title),
+            elevation: 0,
+            actions: [
+              IconButton(icon: Icon(Icons.save), onPressed: _saveDraft),
+              IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () async {
+                    bool rst = await _sendComment();
+                    if (rst) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.remove('draft');
+                      Fluttertoast.showToast(
+                          msg: "发送成功",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      Navigator.of(context).pop();
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "发送失败",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                    //TODO: send unsuccessfully
+                  }),
+            ]),
         body: new WillPopScope(
             onWillPop: _saveDraft,
             child: ZefyrScaffold(

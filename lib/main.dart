@@ -17,9 +17,23 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate
       ],
       theme: ThemeData(
-          primaryColor: Color(0xFF919FC5),
-          accentColor: Color(0xFFA6B4CA),
-          primaryColorBrightness: Brightness.dark),
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          accentColor: Colors.red,
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: new TextStyle(
+                color: Colors.black
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black)
+            ),
+          )
+      ),
+      darkTheme: ThemeData(
+        primaryColor: Colors.black,
+        accentColor: Colors.red,
+        brightness: Brightness.dark,
+      ),
       home: SendCrossPage(),
     );
   }

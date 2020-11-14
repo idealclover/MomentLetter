@@ -11,11 +11,11 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  TextEditingController _urlController;
-  TextEditingController _cidController;
-  TextEditingController _emailController;
-  TextEditingController _usernameController;
-  TextEditingController _passwordController;
+  TextEditingController _urlController = TextEditingController();
+  TextEditingController _cidController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   final FocusNode cidTextFieldNode = FocusNode();
   final FocusNode emailTextFieldNode = FocusNode();
   final FocusNode usernameTextFieldNode = FocusNode();
@@ -38,13 +38,11 @@ class _SettingPageState extends State<SettingPage> {
     ];
     Future<Map> rst = get(strList);
     rst.then((Map rstList) {
-      _urlController = new TextEditingController(text: rstList[strList[0]]);
-      _cidController = new TextEditingController(text: rstList[strList[1]]);
-      _emailController = new TextEditingController(text: rstList[strList[2]]);
-      _usernameController =
-          new TextEditingController(text: rstList[strList[3]]);
-      _passwordController =
-          new TextEditingController(text: rstList[strList[4]]);
+      _urlController.text = rstList[strList[0]];
+      _cidController.text = rstList[strList[1]];
+      _emailController.text = rstList[strList[2]];
+      _usernameController.text = rstList[strList[3]];
+      _passwordController.text = rstList[strList[4]];
     });
   }
 
@@ -139,20 +137,21 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).settings_title),
+        elevation: 0,
       ),
       body: Builder(builder: (BuildContext context) {
         return SingleChildScrollView(
             child: Container(
                 width: double.infinity,
-                margin: EdgeInsets.all(15),
+                margin: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: <Widget>[
                     TextField(
                       controller: _urlController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         icon: Icon(Icons.web),
                         labelText: 'URL',
-                        hintText: 'URL',
                         errorText: _validateUrl ? "请输入 URL" : null,
                       ),
                       onChanged: (String a) => checkUrl(),
@@ -166,11 +165,13 @@ class _SettingPageState extends State<SettingPage> {
                       focusNode: cidTextFieldNode,
                       controller: _cidController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: const EdgeInsets.only(top: 10.0),
                         icon: Icon(Icons.bookmark),
                         labelText: 'Cid',
                         errorText: _validateCid ? "请输入 cid" : null,
                       ),
+                      keyboardType: TextInputType.number,
                       onChanged: (String a) => checkCid(),
                       onEditingComplete: () => FocusScope.of(context)
                           .requestFocus(emailTextFieldNode),
@@ -182,6 +183,7 @@ class _SettingPageState extends State<SettingPage> {
                       focusNode: emailTextFieldNode,
                       controller: _emailController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: const EdgeInsets.only(top: 10.0),
                         icon: Icon(Icons.email),
                         labelText: 'Email',
@@ -198,6 +200,7 @@ class _SettingPageState extends State<SettingPage> {
                       focusNode: usernameTextFieldNode,
                       controller: _usernameController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: const EdgeInsets.only(top: 10.0),
                         icon: Icon(Icons.account_circle),
                         labelText: 'Username',
@@ -214,6 +217,7 @@ class _SettingPageState extends State<SettingPage> {
                       focusNode: passwordTextFieldNode,
                       controller: _passwordController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: const EdgeInsets.only(top: 10.0),
                         icon: Icon(Icons.lock),
                         labelText: 'Password',
@@ -222,12 +226,13 @@ class _SettingPageState extends State<SettingPage> {
                       onChanged: (String a) => checkPassword(),
                       obscureText: true,
                     ),
-
+                    Container(
+                      margin: EdgeInsets.all(5),
+                    ),
                     Container(
                         width: double.infinity,
                         child: FlatButton(
                             color: Theme.of(context).primaryColor,
-                            textColor: Colors.white,
                             child: Text('保存'),
                             onPressed: () async {
                               if (check()) return;
@@ -238,7 +243,6 @@ class _SettingPageState extends State<SettingPage> {
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor:
                                       Theme.of(context).primaryColor,
-                                  textColor: Colors.white,
                                   fontSize: 16.0);
                               Navigator.of(context).pop();
                             })),

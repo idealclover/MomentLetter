@@ -1,7 +1,8 @@
 <p align="center">
-<img src="https://i.loli.net/2019/05/10/5cd54570b8044.png" alt="Moment Machine" width="100">
+<img src="https://i.loli.net/2020/11/16/yLHAeMrSKPQh4iN.png" alt="Moment Letter" width="100">
 </p>
-<h1 align="center">Moment Machine /  时光鸡</h1>
+<h1 align="center">Moment Letter /  时光信笺</h1>
+
 
 > ✨愿未来能让人有所期待。
 
@@ -17,42 +18,39 @@ handsome 作者的时光机在 [这里](https://www.ihewro.com/cross.html)，傻
 
 于是傻翠用 flutter 做了一个~~理论上跨平台~~的APP，可以实现查看时光机，发送时光机的功能，就不用再打开电脑再发送了。
 
-![](https://i.loli.net/2019/05/10/5cd545bc3a6ad.png)
 
-这款 APP 背后与 Typecho 后端通信的接口可以切换 Typecho 原生的 XMLRPC 或 第三方的 Restful 插件。这意味着并不需要过多配置，你便可以轻松接入。
+![](https://i.loli.net/2020/11/16/kFHICMYqPjp7tnb.png)
+
+![](https://i.loli.net/2020/11/16/AwbksKctM243aiQ.png)
+
+这款 APP 背后与 Typecho 后端通信的接口使用的是 Typecho 原生的 XMLRPC 接口。这意味着并不需要过多配置，你便可以轻松接入。
 
 总之，如果你也拥有 Typecho 博客，也想自建时光机；或者如果你也使用 handsome 主题，那就来试试吧！
 
 ## 如何使用
 
-Android：在 [release](https://github.com/idealclover/MomentMachine/releases) 或 [蒲公英内侧平台](https://www.pgyer.com/momentmachine) 或 ~~[酷安]()~~ 中下载打包好的 apk 包并安装
+Android：在 [酷安](https://www.coolapk.com/apk/229824) 或 [release](https://github.com/idealclover/MomentMachine/releases) 中下载 apk 包并安装
 
-苹果：傻翠没钱买开发者账号，可以选择**捐钱给傻翠**或联系我帮助上架。
+苹果：已提交 testflight 等待审核中。
 
-如果使用默认的 XML 接口，需要在``` Typecho 后台 - 设置 - 评论``` 中 将 ```开启反垃圾保护``` 关闭。对于仍然需要反垃圾保护的情况，我们推荐使用 [CommentFilter-typecho](https://github.com/jrotty/CommentFilter-typecho) 插件，并在插件设置中将 ```屏蔽机器人评论``` 关闭。
-
-如果使用第三方 Restful 插件，可以在 [这里](https://github.com/moefront/typecho-plugin-Restful) 进行下载与安装，并且需要 **自定义 URI 前缀为 ```restful```**。
-
+如果评论无法显示或被反垃圾，需要在``` Typecho 后台 - 设置 - 评论``` 中 将 ```开启反垃圾保护``` 关闭。对于仍然需要反垃圾保护的情况，我们推荐使用 [CommentFilter-typecho](https://github.com/jrotty/CommentFilter-typecho) 插件，并在插件设置中将 ```屏蔽机器人评论``` 关闭。
 
 进入 APP 中后会提示设置，在设置完```网站```，```cid```，```用户名```和```密码```后即可测试使用。
 
 ## Minimum Viable Product
 
 - [x] 评论获取改为xmlrpc
-- [ ] 标题改成中文
+- [x] 标题改成中文
 - [x] 头像邮箱信息
-- [x] 检查更新集成bugly
 - [x] 评论markdown
 - [x] 第一次使用提示设置
-- [x] 自动保存 
+- [x] 支持图片
+- [x] 自动保存
 - [x] 捐赠页
 
 ## Next TODOs
-
-- [ ] 支持图片
 - [ ] 支持音频/视频
 - [ ] 更换主题
-- [ ] 美化
 
 ## Contribute
 

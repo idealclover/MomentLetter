@@ -21,14 +21,10 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           accentColor: Colors.red,
           inputDecorationTheme: InputDecorationTheme(
-            labelStyle: new TextStyle(
-                color: Colors.black
-            ),
+            labelStyle: new TextStyle(color: Colors.black),
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black)
-            ),
-          )
-      ),
+                borderSide: BorderSide(color: Colors.black)),
+          )),
       darkTheme: ThemeData(
         primaryColor: Colors.black,
         accentColor: Colors.red,

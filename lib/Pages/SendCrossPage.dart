@@ -20,23 +20,33 @@ class SendCrossPage extends StatefulWidget {
 class _SendCrossPageState extends State<SendCrossPage> {
   List<CommentComponent> _comments = <CommentComponent>[];
   ScrollController _scrollController = ScrollController();
-//  GlobalKey<RefreshIndicatorState> _refreshKey =
-//      GlobalKey<RefreshIndicatorState>();
+
+  GlobalKey<RefreshIndicatorState> _refreshKey =
+      GlobalKey<RefreshIndicatorState>();
+  bool isLoading = false;
   int pageNum = 0;
 
   @override
   void initState() {
     super.initState();
     _loadData(pageNum);
-//    WidgetsBinding.instance.addPostFrameCallback((_) {
-//      _refreshKey.currentState?.show();
-//    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshKey.currentState?.show();
+    });
     _scrollController.addListener(() {
-      double edge = 0;
-      if (_scrollController.position.maxScrollExtent ==
-          _scrollController.position.pixels) {
-        pageNum++;
-        _loadData(pageNum);
+      double edge = 50;
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <=
+          edge) {
+        if (!isLoading) {
+          setState(() {
+            isLoading = true;
+            pageNum = pageNum + 1;
+          });
+//          print(pageNum);
+          _loadData(pageNum);
+        }
+//        print('++');
       }
     });
   }
@@ -103,6 +113,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
       }
       setState(() {
         _comments = _comments;
+        isLoading = false;
       });
       return true;
     } catch (error) {
@@ -120,9 +131,10 @@ class _SendCrossPageState extends State<SendCrossPage> {
     _comments.clear();
     bool rst = false;
     try {
-//      setState(() {
-      pageNum = 0;
-//      });
+      setState(() {
+        isLoading = true;
+        pageNum = 0;
+      });
       rst = await _loadData(pageNum);
     } catch (error) {
       print(error);
@@ -174,7 +186,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
               child: Column(children: <Widget>[
                 Flexible(
                     child: RefreshIndicator(
-//                        key: _refreshKey,
+                        key: _refreshKey,
                         onRefresh: _refresh,
                         child: ListView.builder(
                           itemBuilder: (_, int index) => _comments[index],

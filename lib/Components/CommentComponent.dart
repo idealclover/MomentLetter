@@ -19,8 +19,7 @@ class CommentComponent extends StatelessWidget {
         child: Container(
             padding: EdgeInsets.all(10),
             child: Column(children: <Widget>[
-              Row(
-                  children: <Widget>[
+              Row(children: <Widget>[
 //                    new CircleAvatar(
 //                        backgroundImage: NetworkImage(
 //                            "https://secure.gravatar.com/avatar/a95161b3602abef9f540e7fc6c8cb53a"),
@@ -31,15 +30,16 @@ class CommentComponent extends StatelessWidget {
 //                        children: <Widget>[
 //                          Text(name,
 //                              style: Theme.of(context).textTheme.subhead),
-                          Text(DateFormat('MM.dd kk:mm').format(time))
+                Text(DateFormat('MM.dd kk:mm').format(time))
 //                        ]),
-                  ]),
-              Padding(padding: EdgeInsets.all(5),),
+              ]),
+              Padding(
+                padding: EdgeInsets.all(5),
+              ),
               Container(
                 child: MarkdownBody(
                     data: text.replaceFirst(Constant.watermark, '')),
               ),
-            ]))
-        );
+            ])));
   }
 }

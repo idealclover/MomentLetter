@@ -62,8 +62,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
               if (avatar.hasData && avatar.data != null) {
                 return CircleAvatar(
                     backgroundImage: CachedNetworkImageProvider(avatar.data),
-                    backgroundColor: Theme.of(context).primaryColor
-                );
+                    backgroundColor: Theme.of(context).primaryColor);
               } else
                 return Text("");
             }),

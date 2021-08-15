@@ -7,7 +7,7 @@ import 'package:xml_rpc/client.dart' as xml_rpc;
 import 'package:dio/dio.dart';
 import '../Components/DrawerComponent.dart';
 import '../Components/CommentComponent.dart';
-import './SettingPage.dart';
+import './SettingDetailPage.dart';
 import './EditPage.dart';
 
 class SendCrossPage extends StatefulWidget {
@@ -123,7 +123,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
   }
 
   Future<bool> _loadData(int pageNum) async {
-    print(pageNum);
+//    print(pageNum);
     return await _loadDataXmlRPC(pageNum);
   }
 

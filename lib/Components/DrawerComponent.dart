@@ -7,7 +7,9 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
 import '../pages/SendCrossPage.dart';
-import '../pages/SettingPage.dart';
+import '../pages/EditPage.dart';
+import '../pages/SettingDetailPage.dart';
+import '../pages/MusicPage.dart';
 
 class DrawerComponent extends StatefulWidget {
   @override
@@ -87,9 +89,17 @@ class _DrawerComponentState extends State<DrawerComponent> {
           title: Text('时光信笺'),
           trailing: Icon(Icons.send),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => SendCrossPage()));
             Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => EditPage()));
+          }),
+      ListTile(
+          title: Text('分享歌曲'),
+          trailing: Icon(Icons.music_note),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => MusicPage()));
           }),
       ListTile(
           title: Text('检查更新'),
@@ -131,11 +141,11 @@ class _DrawerComponentState extends State<DrawerComponent> {
           onTap: () async {
             Navigator.of(context).pop();
             if (await canLaunch(
-                "https://qr.alipay.com/tsx01807zuhjvzgmt5xmtb0")) {
-              await launch("https://qr.alipay.com/tsx01807zuhjvzgmt5xmtb0");
+                "https://donate.idealclover.cn")) {
+              await launch("https://donate.idealclover.cn");
             } else {
               Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text("调用支付宝失败")));
+                  .showSnackBar(SnackBar(content: Text("打开链接失败")));
             }
           }),
       ListTile(

@@ -3,15 +3,17 @@ import '../generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xml_rpc/client.dart' as xml_rpc;
+import 'package:quill_delta/quill_delta.dart';
 import 'package:flutter/material.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:notus/convert.dart';
 import 'package:dio/dio.dart';
 import '../Resources/Constant.dart';
-import './SettingPage.dart';
+import './SettingDetailPage.dart';
 
 class EditPage extends StatefulWidget {
-  EditPage() : super();
+  EditPage({this.text = ''}) : super();
+  final String text;
 
   @override
   _EditPageState createState() => _EditPageState();
@@ -107,8 +109,8 @@ class _EditPageState extends State<EditPage> {
         msg: "草稿已保存",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: Theme.of(context).primaryColor,
-        textColor: Colors.white,
+//        backgroundColor: Theme.of(context).primaryColor,
+//        textColor: Colors.white,
         fontSize: 16.0);
     return true;
   }
@@ -116,7 +118,11 @@ class _EditPageState extends State<EditPage> {
   Future<bool> _buildDocument() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String draft = prefs.getString('draft');
-    if (draft != null)
+    if(widget.text != '') {
+      final Delta delta = Delta()..insert(widget.text);
+      document = NotusDocument.fromDelta(delta);
+    }
+    else if (draft != null)
       document = new NotusDocument.fromJson(json.decode(draft) as List);
     else
       document = NotusDocument();

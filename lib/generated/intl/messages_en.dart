@@ -23,6 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("时光信笺"),
     "edit_title" : MessageLookupByLibrary.simpleMessage("写信"),
+    "import_music_title" : MessageLookupByLibrary.simpleMessage("分享歌曲"),
     "save_button" : MessageLookupByLibrary.simpleMessage("保存"),
     "send_button" : MessageLookupByLibrary.simpleMessage("投递"),
     "settings_title" : MessageLookupByLibrary.simpleMessage("设置")

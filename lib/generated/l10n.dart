@@ -53,6 +53,16 @@ class S {
     );
   }
 
+  /// `分享歌曲`
+  String get import_music_title {
+    return Intl.message(
+      '分享歌曲',
+      name: 'import_music_title',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `保存`
   String get save_button {
     return Intl.message(

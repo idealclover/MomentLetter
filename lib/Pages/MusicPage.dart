@@ -16,7 +16,7 @@ class _MusicPageState extends State<MusicPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
+        // resizeToAvoidBottomPadding: true,
         appBar: AppBar(
             title: Text(S.of(context).import_music_title),
             elevation: 0,

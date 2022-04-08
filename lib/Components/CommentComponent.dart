@@ -37,6 +37,7 @@ class CommentComponent extends StatelessWidget {
                 padding: EdgeInsets.all(5),
               ),
               Container(
+                alignment: Alignment.topLeft,
                 child: MarkdownBody(
                     data: text.replaceFirst(Constant.watermark, '')),
               ),

@@ -6,7 +6,7 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-import '../pages/SendCrossPage.dart';
+import '../pages/CrossPage.dart';
 import '../pages/EditPage.dart';
 import '../pages/SettingDetailPage.dart';
 import '../pages/MusicPage.dart';
@@ -30,7 +30,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
     return _getEmail().then((String email) {
       var content = new Utf8Encoder().convert(email);
       var digest = md5.convert(content);
-      return "https://secure.gravatar.com/avatar/" + hex.encode(digest.bytes);
+      return "https://gravatar.loli.net/avatar/" + hex.encode(digest.bytes);
     });
   }
 

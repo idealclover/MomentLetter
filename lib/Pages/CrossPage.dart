@@ -29,7 +29,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
   @override
   void initState() {
     super.initState();
-    _loadData(pageNum);
+    // _loadData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _refreshKey.currentState?.show();
     });
@@ -41,10 +41,9 @@ class _SendCrossPageState extends State<SendCrossPage> {
         if (!isLoading) {
           setState(() {
             isLoading = true;
-            pageNum = pageNum + 1;
           });
 //          print(pageNum);
-          _loadData(pageNum);
+          _loadData();
         }
 //        print('++');
       }
@@ -77,7 +76,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
         });
   }
 
-  Future<bool> _loadDataXmlRPC(int pageNum) async {
+  Future<bool> _loadDataXmlRPC() async {
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Map rst = await _get(strList);
@@ -93,11 +92,13 @@ class _SendCrossPageState extends State<SendCrossPage> {
     username = rst[strList[2]];
     password = rst[strList[3]];
     try {
+      pageNum++;
+      print(pageNum);
       var response = await xml_rpc.call(url, 'wp.getComments', [
         1,
         username,
         password,
-        {'post_id': int.parse(cid), 'number': 20, 'offset': (pageNum + 1) * 20}
+        {'post_id': int.parse(cid), 'number': 20, 'offset': pageNum * 20}
       ]);
       for (var comment in response) {
 //        print(comment);
@@ -122,9 +123,8 @@ class _SendCrossPageState extends State<SendCrossPage> {
     }
   }
 
-  Future<bool> _loadData(int pageNum) async {
-//    print(pageNum);
-    return await _loadDataXmlRPC(pageNum);
+  Future<bool> _loadData() async {
+    return await _loadDataXmlRPC();
   }
 
   Future<Null> _refresh() async {
@@ -135,7 +135,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
         isLoading = true;
         pageNum = 0;
       });
-      rst = await _loadData(pageNum);
+      rst = await _loadData();
     } catch (error) {
       print(error);
     }
@@ -199,7 +199,7 @@ class _SendCrossPageState extends State<SendCrossPage> {
           onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (BuildContext context) => EditPage())),
           tooltip: 'Increment',
-          child: new Icon(Icons.add),
+          child: new Icon(Icons.add, color: Colors.white,),
         ));
   }
 }

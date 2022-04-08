@@ -3,10 +3,16 @@ import '../generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xml_rpc/client.dart' as xml_rpc;
-import 'package:quill_delta/quill_delta.dart';
+
+// import 'package:quill_delta/quill_delta.dart';
+// import 'package:quill_format/quill_format.dart';
 import 'package:flutter/material.dart';
-import 'package:zefyr/zefyr.dart';
-import 'package:notus/convert.dart';
+
+// import 'package:zefyrka/zefyrka.dart';
+// import 'package:zefyr/zefyr.dart';
+import 'package:notus_format/convert.dart';
+
+// import 'package:notus/convert.dart';
 import 'package:dio/dio.dart';
 import '../Resources/Constant.dart';
 import './SettingDetailPage.dart';
@@ -20,9 +26,11 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  ZefyrController _controller;
+  TextEditingController _controller;
+
+  // ZefyrController _controller;
+  // NotusDocument document;
   FocusNode _focusNode;
-  NotusDocument document;
 
   @override
   void initState() {
@@ -61,8 +69,9 @@ class _EditPageState extends State<EditPage> {
   }
 
   Future<bool> _sendCommentXmlrpc() async {
-    String mk = notusMarkdown.encode(_controller.document.toDelta());
-    mk = mk + Constant.watermark;
+    String mk = _controller.text;
+    // String mk = notusMarkdown.encode(_controller.document.toDelta());
+    mk = mk + '\n\n' + Constant.watermark;
     String url, cid, username, password;
     List<String> strList = ['url', 'cid', 'username', 'password'];
     Map rst = await _get(strList);
@@ -88,7 +97,7 @@ class _EditPageState extends State<EditPage> {
         }
       ], headers: {
         "User-Agent":
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36"
       });
       return true;
     } catch (error) {
@@ -103,8 +112,9 @@ class _EditPageState extends State<EditPage> {
 
   Future<bool> _saveDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('draft', jsonEncode(_controller.document.toJson()));
-    if (_controller.document.toPlainText() == '\n') return true;
+    prefs.setString('draft', _controller.text);
+    // prefs.setString('draft', jsonEncode(_controller.document.toJson()));
+    // if (_controller.document.toPlainText() == '\n') return true;
     Fluttertoast.showToast(
         msg: "草稿已保存",
         toastLength: Toast.LENGTH_SHORT,
@@ -117,16 +127,19 @@ class _EditPageState extends State<EditPage> {
 
   Future<bool> _buildDocument() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String draft = prefs.getString('draft');
-    if(widget.text != '') {
-      final Delta delta = Delta()..insert(widget.text);
-      document = NotusDocument.fromDelta(delta);
+    String draft = '';
+    if (widget.text != '') {
+      //   final Delta delta = Delta()..insert(widget.text);
+      //   document = NotusDocument.fromDelta(delta);
+      draft = widget.text;
+    } else if (draft != null) {
+      draft = prefs.getString('draft');
+      //   document = new NotusDocument.fromJson(json.decode(draft) as List);
     }
-    else if (draft != null)
-      document = new NotusDocument.fromJson(json.decode(draft) as List);
-    else
-      document = NotusDocument();
-    _controller = new ZefyrController(document);
+    // else
+    //   document = NotusDocument();
+    // _controller = new ZefyrController(document);
+    _controller = new TextEditingController(text: draft);
     _focusNode = new FocusNode();
     return true;
   }
@@ -134,9 +147,11 @@ class _EditPageState extends State<EditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
+      // resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-            title: Text(S.of(context).edit_title),
+            title: Text(S
+                .of(context)
+                .edit_title),
             elevation: 0,
             actions: [
               IconButton(icon: Icon(Icons.save), onPressed: _saveDraft),
@@ -146,13 +161,15 @@ class _EditPageState extends State<EditPage> {
                     bool rst = await _sendComment();
                     if (rst) {
                       SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      await SharedPreferences.getInstance();
                       prefs.remove('draft');
                       Fluttertoast.showToast(
                           msg: "发送成功",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Theme
+                              .of(context)
+                              .primaryColor,
                           textColor: Colors.white,
                           fontSize: 16.0);
                       Navigator.of(context).pop();
@@ -161,7 +178,9 @@ class _EditPageState extends State<EditPage> {
                           msg: "发送失败",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Theme
+                              .of(context)
+                              .primaryColor,
                           textColor: Colors.white,
                           fontSize: 16.0);
                     }
@@ -170,17 +189,39 @@ class _EditPageState extends State<EditPage> {
             ]),
         body: new WillPopScope(
             onWillPop: _saveDraft,
-            child: ZefyrScaffold(
-                child: FutureBuilder(
-                    future: _buildDocument(),
-                    builder: (context, AsyncSnapshot<bool> draft) {
-                      if (draft.hasData) {
-                        return ZefyrEditor(
-                          controller: _controller,
-                          focusNode: _focusNode,
-                        );
-                      } else
-                        return Container();
-                    }))));
+            child:
+            // TextField(
+            //   controller: _controller,
+            //   focusNode: _focusNode,
+            // ),
+            FutureBuilder(
+                future: _buildDocument(),
+                builder: (context, AsyncSnapshot<bool> draft) {
+                  if (draft.hasData) {
+                    return TextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 99999
+                    );
+                  } else
+                    return Container();
+                })
+          // ZefyrEditor(
+          //   controller: _controller,
+          //   focusNode: _focusNode,
+          //     // child: FutureBuilder(
+          //     //     future: _buildDocument(),
+          //     //     builder: (context, AsyncSnapshot<bool> draft) {
+          //     //       if (draft.hasData) {
+          //     //         return ZefyrEditor(
+          //     //           controller: _controller,
+          //     //           focusNode: _focusNode,
+          //     //         );
+          //     //       } else
+          //     //         return Container();
+          //     //     })
+          // )
+        ));
   }
 }
